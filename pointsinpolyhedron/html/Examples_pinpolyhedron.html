@@ -1,0 +1,292 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Tutorial and examples of PINPOLYHEDRON function</title><meta name="generator" content="MATLAB 8.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2014-10-13"><meta name="DC.source" content="Examples_pinpolyhedron.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, tt, code { font-size:12px; }
+pre { margin:0px 0px 20px; }
+pre.error { color:red; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Tutorial and examples of PINPOLYHEDRON function</h1><!--introduction--><p>PINPOLYHEDRON:     This function is an implementation of a novel algorithm. It tests whether points are inside/outside/on a polyhedron defined by triangular faces and vertices. It can be used for various complicated models such as non-convex volumes, multi-material bodies, and there is no assumption about orientation of the face normals. Above all, the algorithm is very efficient especially for large-scale problems.To the authors' best knowledge, it is the fastest code in a large-scale setting.</p><p>SYNTAX:</p><p>output = pinpolyhedron (p,vertices,faces);</p><p>INPUT:</p><pre class="language-matlab">p : The points <span class="string">to</span> <span class="string">be</span> <span class="string">tested</span> <span class="string">represented</span> <span class="string">as</span> <span class="string">an</span> <span class="string">Nx3</span> <span class="string">matrix</span> <span class="string">of</span> <span class="string">XYZ</span> <span class="string">coordinates</span>,
+    e.g., [x1 y1 z1; x2 y2 z2; &#8230;].
+</pre><pre class="language-matlab">vertices : The vertices <span class="string">of</span> <span class="string">the</span> <span class="string">polyhedron</span>, in <span class="string">an</span> <span class="string">Mx3</span> <span class="string">matrix</span> <span class="string">of</span> <span class="string">XYZ</span> <span class="string">coordinates</span>,
+    e.g., [x1 y1 z1; x2 y2 z2; &#8230;].
+</pre><pre class="language-matlab">faces : The faces <span class="string">of</span> <span class="string">the</span> <span class="string">polyhedron</span>, in <span class="string">an</span> <span class="string">Mx3</span> <span class="string">matrix</span>,
+    e.g., [a1,b1,c1; a2,b2,c2; <span class="keyword">...</span><span class="comment">].a b c are the index numbers of the</span>
+    three vertices forming the triangular faces.
+</pre><p>OUTPUT:</p><pre class="language-matlab">output : an Mx4 <span class="string">array.</span> <span class="string">The</span> <span class="string">first</span> <span class="string">three</span> <span class="string">columns</span> <span class="string">are</span> <span class="string">same</span> <span class="string">as</span> <span class="string">the</span> <span class="string">input</span> <span class="string">p.</span>
+        The <span class="string">function</span> <span class="string">set</span> <span class="string">the</span> <span class="string">fourth</span> <span class="string">column</span> <span class="string">as</span> <span class="string">-1</span> <span class="string">and</span> <span class="string">0</span>, standing <span class="string">for</span>
+        outside <span class="string">or</span> <span class="string">inside</span> <span class="string">the</span> <span class="string">polyhedron</span> <span class="string">respectively</span> ,and <span class="string">-2</span> <span class="string">stands</span> <span class="string">for</span>
+        p <span class="string">on</span> <span class="string">the</span> <span class="string">boundary.</span>
+</pre><p>ABOUT multi-material polyhedron:</p><p>A body may be composed of different materials, from which one can get a multi-material polyhedron by triangulating its outer boundary and inner boundaries between different materials.</p><p>Our algorithm can be used for multi-material polyhedrons too.</p><p>The syntax in this case is almost the same. However, the input of faces should be an Mx5 matrix, e.g., [a1,b1,c1,m11, m12; a2,b2,c2,m21,m22; ...]. Here a b c are still index numbers of vertices, and m1 m2 are the two materials on either side of a face. Invoking the function in this way, it will indicate, for a point inside the body, which material the point is in by setting the fourth column output value as the material number. If a testing point is exactly on a triangular face, whether the face is on the outer boundary or an inner one, the function will set the output value as -2.</p><p>AUTHOR: Guo YuFei, Jose M. Maisog, Liu JF</p><p>REFERENCE : Liu JF, Y.Q. Chen, Jose M. Maisog, George Luta, A new point containment test algorithm based on preprocessing and determining triangles, Computer-Aided Design, vol 42, No.12, December 2010, Pages 1143-1150.</p><p>22 Sep 2014 : Version 1.0</p><p>Problems or suggestions? Email me: <a href="mailto:guoyufei2014@gmail.com">guoyufei2014@gmail.com</a></p><p>More information? Get from: https://stat.ethz.ch/CRAN/web/packages/ptinpoly/</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">First example: box(single material model)</a></li><li><a href="#2">Second example: twonestedboxes(two-material model)</a></li></ul></div><h2>First example: box(single material model)<a name="1"></a></h2><pre class="codeinput">b=[0 0 0;1 0 0;1 1 0;0 1 0;0 0 1;1 0 1;1 1 1;0 1 1];
+c=[0 1 3;1 3 2;0 5 4;0 1 5;1 2 6;1 6 5;3 6 2;6 7 3;0 4 7;<span class="keyword">...</span>
+0 7 3;4 5 7;6 5 7];
+a=[rand(50,3)*2-0.5;0 0.3 0.4;0.5 0.5 1];
+c=c+1;
+out=pinpolyhedron(a,b,c);
+fv.vertices=b;
+fv.faces=c;
+figure, hold <span class="string">on</span>, view(3)
+patch(fv,<span class="string">'FaceColor'</span>,<span class="string">'g'</span>,<span class="string">'FaceAlpha'</span>,0.2)
+[m,n]=size(a);
+<span class="keyword">for</span> i=1:m
+    <span class="keyword">if</span> out(i,4)==0
+        plot3(out(i,1),out(i,2),out(i,3),<span class="string">'bo'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'b'</span>)
+    <span class="keyword">elseif</span> out(i,4)==-1
+        plot3(out(i,1),out(i,2),out(i,3),<span class="string">'ro'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>)
+    <span class="keyword">else</span>
+        plot3(out(i,1),out(i,2),out(i,3),<span class="string">'yo'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'y'</span>)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+axis <span class="string">image</span>
+</pre><pre class="codeoutput">Your model is composed of 1 different materials.
+</pre><img vspace="5" hspace="5" src="Examples_pinpolyhedron_01.png" alt=""> <h2>Second example: twonestedboxes(two-material model)<a name="2"></a></h2><pre class="codeinput">b=[0 0 0;1 0 0;1 1 0;0 1 0;0 0 1;1 0 1;1 1 1;0 1 1;<span class="keyword">...</span>
+0.250000 0.250000 0.250000;0.750000 0.250000 0.250000;<span class="keyword">...</span>
+0.750000 0.750000 0.250000;0.250000 0.750000 0.250000;<span class="keyword">...</span>
+0.250000 0.250000 0.750000;0.750000 0.250000 0.750000;<span class="keyword">...</span>
+0.750000 0.750000 0.750000;0.250000 0.750000 0.750000];
+c=[0 1 3   0 -1
+1 3 2   -1 0
+0 5 4   -1 0
+0 1 5   -1 0
+1 2 6   -1 0
+1 6 5   -1 0
+3 6 2   -1 0
+6 7 3   0 -1
+0 4 7   -1 0
+0 7 3   -1 0
+4 5 7   -1 0
+6 5 7   0 -1
+
+8 9 11    1 0
+9 11 10   0 1
+8 13 12   0 1
+8 9 13    0 1
+9 10 14   0 1
+9 14 13   0 1
+11 14 10  0 1
+14 15 11  1 0
+8 12 15   0 1
+8 15 11   0 1
+12 13 15  0 1
+14 13 15  1 0];
+a=[rand(50,3)*2-0.5];
+out=pinpolyhedron(a,b,c);
+fv.vertices=b;
+fv.faces=c(:,1:3)+1;
+figure, hold <span class="string">on</span>, view(3)
+patch(fv,<span class="string">'FaceColor'</span>,<span class="string">'g'</span>,<span class="string">'FaceAlpha'</span>,0.2)
+[m,n]=size(a);
+<span class="keyword">for</span> i=1:m
+    <span class="keyword">switch</span> out(i,4)
+        <span class="keyword">case</span> 0
+        plot3(out(i,1),out(i,2),out(i,3),<span class="string">'co'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'c'</span>)
+        <span class="keyword">case</span> -1
+        plot3(out(i,1),out(i,2),out(i,3),<span class="string">'ro'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>)
+        <span class="keyword">case</span> 1
+        plot3(out(i,1),out(i,2),out(i,3),<span class="string">'bo'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'b'</span>)
+        <span class="keyword">otherwise</span>
+        plot3(out(i,1),out(i,2),out(i,3),<span class="string">'yo'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'y'</span>)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+axis <span class="string">image</span>
+</pre><pre class="codeoutput">Your model is composed of 2 different materials.
+</pre><img vspace="5" hspace="5" src="Examples_pinpolyhedron_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2012b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Tutorial and examples of PINPOLYHEDRON function
+%
+% PINPOLYHEDRON:
+%     This function is an implementation of a novel algorithm. It tests whether
+% points are inside/outside/on a polyhedron defined by triangular faces and 
+% vertices. It can be used for various complicated models such as non-convex 
+% volumes, multi-material bodies, and there is no assumption about orientation
+% of the face normals. Above all, the algorithm is very efficient especially 
+% for large-scale problems.To the authors' best knowledge, it is the fastest 
+% code in a large-scale setting.
+% 
+% SYNTAX: 
+% 
+% output = pinpolyhedron (p,vertices,faces); 
+% 
+% INPUT: 
+% 
+%   p : The points to be tested represented as an Nx3 matrix of XYZ coordinates,
+%       e.g., [x1 y1 z1; x2 y2 z2; …].
+%       
+%   vertices : The vertices of the polyhedron, in an Mx3 matrix of XYZ coordinates,
+%       e.g., [x1 y1 z1; x2 y2 z2; …]. 
+%          
+%   faces : The faces of the polyhedron, in an Mx3 matrix, 
+%       e.g., [a1,b1,c1; a2,b2,c2; ...].a b c are the index numbers of the 
+%       three vertices forming the triangular faces.
+%       
+% OUTPUT:
+% 
+%   output : an Mx4 array. The first three columns are same as the input p. 
+%           The function set the fourth column as -1 and 0, standing for 
+%           outside or inside the polyhedron respectively ,and -2 stands for
+%           p on the boundary.
+%           
+% ABOUT multi-material polyhedron:
+% 
+% A body may be composed of different materials, from which one can get a 
+% multi-material polyhedron by triangulating its outer boundary and inner 
+% boundaries between different materials. 
+%
+% Our algorithm can be used for multi-material polyhedrons too.
+%
+% The syntax in this case is almost the same. However, the input of faces 
+% should be an Mx5 matrix, e.g., [a1,b1,c1,m11, m12; a2,b2,c2,m21,m22; ...]. 
+% Here a b c are still index numbers of vertices, and m1 m2 are the two 
+% materials on either side of a face. 
+% Invoking the function in this way, it will indicate, for a point inside 
+% the body, which material the point is in by setting the fourth column output
+% value as the material number. If a testing point is exactly on a triangular face, 
+% whether the face is on the outer boundary or an inner one, the function
+% will set the output value as -2. 
+% 
+% AUTHOR: Guo YuFei, Jose M. Maisog, Liu JF
+% 
+% REFERENCE : Liu JF, Y.Q. Chen, Jose M. Maisog, George Luta, A new point 
+% containment test algorithm based on preprocessing and determining triangles,
+% Computer-Aided Design, vol 42, No.12, December 2010, Pages 1143-1150.
+% 
+% 22 Sep 2014 : Version 1.0 
+% 
+% Problems or suggestions? Email me: guoyufei2014@gmail.com 
+% 
+% More information? Get from: https://stat.ethz.ch/CRAN/web/packages/ptinpoly/
+%
+%% First example: box(single material model)
+b=[0 0 0;1 0 0;1 1 0;0 1 0;0 0 1;1 0 1;1 1 1;0 1 1]; 
+c=[0 1 3;1 3 2;0 5 4;0 1 5;1 2 6;1 6 5;3 6 2;6 7 3;0 4 7;...
+0 7 3;4 5 7;6 5 7];   
+a=[rand(50,3)*2-0.5;0 0.3 0.4;0.5 0.5 1];
+c=c+1;
+out=pinpolyhedron(a,b,c);
+fv.vertices=b;
+fv.faces=c;
+figure, hold on, view(3)      
+patch(fv,'FaceColor','g','FaceAlpha',0.2)
+[m,n]=size(a);
+for i=1:m
+    if out(i,4)==0
+        plot3(out(i,1),out(i,2),out(i,3),'bo','MarkerFaceColor','b')
+    elseif out(i,4)==-1
+        plot3(out(i,1),out(i,2),out(i,3),'ro','MarkerFaceColor','r')
+    else
+        plot3(out(i,1),out(i,2),out(i,3),'yo','MarkerFaceColor','y')
+    end
+end
+axis image
+%% Second example: twonestedboxes(two-material model)
+b=[0 0 0;1 0 0;1 1 0;0 1 0;0 0 1;1 0 1;1 1 1;0 1 1;...
+0.250000 0.250000 0.250000;0.750000 0.250000 0.250000;...
+0.750000 0.750000 0.250000;0.250000 0.750000 0.250000;...
+0.250000 0.250000 0.750000;0.750000 0.250000 0.750000;...
+0.750000 0.750000 0.750000;0.250000 0.750000 0.750000];
+c=[0 1 3   0 -1
+1 3 2   -1 0
+0 5 4   -1 0
+0 1 5   -1 0
+1 2 6   -1 0
+1 6 5   -1 0
+3 6 2   -1 0
+6 7 3   0 -1
+0 4 7   -1 0
+0 7 3   -1 0
+4 5 7   -1 0
+6 5 7   0 -1
+
+8 9 11    1 0
+9 11 10   0 1
+8 13 12   0 1
+8 9 13    0 1
+9 10 14   0 1
+9 14 13   0 1
+11 14 10  0 1
+14 15 11  1 0
+8 12 15   0 1
+8 15 11   0 1
+12 13 15  0 1
+14 13 15  1 0];
+a=[rand(50,3)*2-0.5];
+out=pinpolyhedron(a,b,c);
+fv.vertices=b;
+fv.faces=c(:,1:3)+1;
+figure, hold on, view(3)      
+patch(fv,'FaceColor','g','FaceAlpha',0.2)
+[m,n]=size(a);
+for i=1:m
+    switch out(i,4)
+        case 0
+        plot3(out(i,1),out(i,2),out(i,3),'co','MarkerFaceColor','c')
+        case -1
+        plot3(out(i,1),out(i,2),out(i,3),'ro','MarkerFaceColor','r')
+        case 1
+        plot3(out(i,1),out(i,2),out(i,3),'bo','MarkerFaceColor','b')
+        otherwise
+        plot3(out(i,1),out(i,2),out(i,3),'yo','MarkerFaceColor','y')
+    end
+end
+axis image
+##### SOURCE END #####
+--></body></html>
